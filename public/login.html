@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>login</title>
+    <script>
+      function goPost() {
+        window.location.href = "postpage.html";
+      }
+
+      function signup() {
+        window.location.href = "signup.html";
+      }
+
+      function login() {
+        const userid = document.getElementById("userid").value;
+        const password = document.getElementById("password").value;
+
+        fetch("http://127.0.0.1:8080/auth/login", {
+          method: "POST", // POST 요청
+          headers: {
+            "Content-Type": "application/json", // JSON 데이터 전송
+          }, // database
+          body: JSON.stringify({
+            userid,
+            password,
+          }), // 보내고 싶은 데이터
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("네트워크 응답이 올바르지 않습니다.");
+            }
+            return response.json(); // JSON으로 변환
+          })
+          .then((data) => {
+            debugger;
+            console.log(JSON.stringify(data, null, 2));
+            goPost();
+
+            localStorage.setItem("token", data.token);
+          })
+          .catch((error) => {
+            console.error("에러 발생:", error);
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <p>아이디: <input type="text" id="userid" /></p>
+    <p>패스워드: <input type="password" id="password" /></p>
+    <button onclick="login()">로그인</button>
+    <button onclick="signup()">회원가입</button>
+  </body>
+</html>

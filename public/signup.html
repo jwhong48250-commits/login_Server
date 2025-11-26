@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup</title>
+    <style>
+      .signup {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        text-align: left 10px;
+        margin: 50px auto;
+        max-width: max-content;
+      }
+
+      .signup button {
+        display: block;
+        margin-left: auto;
+        margin-right: 0px;
+        background-color: aqua;
+      }
+    </style>
+    <script>
+      function goToLogIn() {
+        window.location.href = "login.html";
+      }
+
+      function signup() {
+        const userid = document.getElementById("userid").value;
+        const password = document.getElementById("password").value;
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
+        const url = document.getElementById("url").value;
+
+        fetch("http://127.0.0.1:8080/auth/signup", {
+          method: "POST", // POST 요청
+          headers: {
+            "Content-Type": "application/json", // JSON 데이터 전송
+          }, // database
+          body: JSON.stringify({
+            userid,
+            password,
+            name,
+            email,
+            url,
+          }), // 보내고 싶은 데이터
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("네트워크 응답이 올바르지 않습니다.");
+            }
+            return response.json(); // JSON으로 변환
+          })
+          .then((data) => {
+            console.log(JSON.stringify(data, null, 2));
+            goToLogIn();
+            localStorage.setItem("token", data.token);
+          })
+          .catch((error) => {
+            console.error("에러 발생:", error);
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <div class="signup">
+      <h2>회원가입</h2>
+      <div class="from_row">
+        <p>아이디: <input type="text" id="userid" /></p>
+      </div>
+      <div class="from_row">
+        <p>비밀번호: <input type="password" id="password" value="123456a" /></p>
+      </div>
+      <div class="from_row">
+        <p>이름: <input type="text" id="name" value="홍길동" /></p>
+      </div>
+      <div class="from_row">
+        <p>
+          이메일: <input type="text" id="email" value="jwhong@jwhong.com" />
+        </p>
+      </div>
+      <div class="from_row">
+        <p>
+          프로필사진
+          <input
+            type="text"
+            id="url"
+            value="https://randomuser.me/api/portraits/women/32.jpg"
+          />
+        </p>
+      </div>
+      <button onclick="signup()">회원가입</button>
+    </div>
+  </body>
+</html>

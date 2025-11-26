@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post 페이지</title>
+    <script>
+      function loaddata() {
+        const API_URL = "http://127.0.0.1:8080/post";
+        const token = localStorage.getItem("token");
+        fetch("http://127.0.0.1:8080/post/", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("네트워크 응답이 올바르지 않습니다.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log(JSON.stringify(data, null, 2));
+            // goToLogIn();
+            // localStorage.setItem("token", data.token);
+            let Html = "";
+
+            debugger;
+            for (let i = 0; i < data.length; i++) {
+              Html += `<div>${data[i].name}<br>${data[i].text}<br></div>`;
+              document.getElementById("Info").innerHTML = Html;
+            }
+          })
+          .catch((error) => {
+            console.error("에러 발생:", error);
+          });
+      }
+    </script>
+  </head>
+  <body onload="loaddata()">
+    <h1>포스트 리스트</h1>
+    <div id="Info"></div>
+  </body>
+</html>
