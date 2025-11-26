@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Write Post</title>
+
+    <script>
+      function writePost() {
+        const text = document.getElementById("text").value;
+
+        if (!text.trim()) {
+          alert("내용을 입력하세요.");
+          return;
+        }
+
+        const token = localStorage.getItem("token");
+
+        fetch("http://127.0.0.1:8080/post/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            text: text, // name 없이 text만 보내기
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("POST 실패");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            console.log("저장됨:", data);
+            alert("작성 완료!");
+            window.location.href = "postpage.html"; // 목록 페이지로 이동
+          })
+          .catch((error) => {
+            console.error("에러 발생:", error);
+            alert("작성 중 오류가 발생했습니다.");
+          });
+      }
+    </script>
+  </head>
+
+  <body>
+    <h2>글 작성 페이지</h2>
+
+    <div>
+      <label>내용:</label><br />
+      <textarea id="text" rows="8" cols="40"></textarea>
+    </div>
+
+    <button onclick="writePost()">작성완료</button>
+  </body>
+</html>

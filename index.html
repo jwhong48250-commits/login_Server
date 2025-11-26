@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>login</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f4f8; /* light cool gray 배경 */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      div {
+        background-color: #ffffff; /* 흰색 */
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        padding: 40px 30px;
+        width: 320px;
+        text-align: center;
+      }
+
+      h4 {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 10px;
+        text-align: left;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px 12px;
+        margin-top: 5px;
+        margin-bottom: 20px;
+        border: 1px solid #cbd5e0; /* light cool gray border */
+        border-radius: 8px;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      input[type="text"]:focus,
+      input[type="password"]:focus {
+        border-color: #63b3ed; /* focus 시 하늘색 강조 */
+        box-shadow: 0 0 5px rgba(99, 179, 237, 0.5);
+      }
+
+      button {
+        background-color: #63b3ed; /* 하늘색 */
+        color: #fff;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 12px;
+        margin-top: 10px;
+        width: 100%;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.1s;
+      }
+
+      button:hover {
+        background-color: #4299e1;
+        transform: translateY(-2px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      button + button {
+        background-color: #edf2f7; /* light gray */
+        color: #2d3748; /* dark gray text */
+        margin-top: 10px;
+      }
+
+      button + button:hover {
+        background-color: #e2e8f0;
+      }
+    </style>
+
+    <script>
+      function goPost() {
+        window.location.href = "postpage.html";
+      }
+
+      function signup() {
+        window.location.href = "signup.html";
+      }
+
+      function login() {
+        const userid = document.getElementById("userid").value;
+        const password = document.getElementById("password").value;
+
+        fetch("http://127.0.0.1:8080/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userid,
+            password,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("네트워크 응답이 올바르지 않습니다.");
+            }
+            return response.json(); // JSON으로 변환
+          })
+          .then((data) => {
+            console.log(JSON.stringify(data, null, 2));
+            goPost();
+
+            localStorage.setItem("token", data.token);
+          })
+          .catch((error) => {
+            console.error("에러 발생:", error);
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <div>
+      <h4>아이디<br /><input type="text" id="userid" /></h4>
+      <h4>패스워드<br /><input type="password" id="password" /><br /></h4>
+      <button class="button" onclick="login()">로그인</button><br />
+      <button class="button" onclick="signup()">회원가입</button>
+    </div>
+  </body>
+</html>

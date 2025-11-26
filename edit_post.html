@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Post</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f4f8; /* light cool gray */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 10px;
+        min-height: 100vh;
+      }
+
+      h2 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      /* 수정 박스 */
+      div {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 100%;
+        max-width: 600px;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+      }
+
+      label {
+        font-weight: 500;
+        color: #333;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #cbd5e0;
+        font-size: 14px;
+        resize: vertical;
+        box-sizing: border-box;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+
+      textarea:focus {
+        border-color: #63b3ed;
+        box-shadow: 0 0 5px rgba(99, 179, 237, 0.5);
+      }
+
+      /* 수정 완료 버튼 */
+      button {
+        background-color: #63b3ed;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.1s;
+      }
+
+      button:hover {
+        background-color: #4299e1;
+        transform: translateY(-2px);
+      }
+    </style>
+
+    <script>
+      // URL에서 id 가져오기
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = urlParams.get("id");
+
+      const token = localStorage.getItem("token");
+
+      // 페이지 로드 시 기존 글 내용 불러오기
+      window.onload = function () {
+        fetch(`http://127.0.0.1:8080/post/${postId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById("text").value = data.text;
+          })
+          .catch((err) => console.error("로드 오류:", err));
+      };
+
+      // 수정 완료 버튼 → PUT 요청
+      function updatePost() {
+        const newText = document.getElementById("text").value;
+
+        fetch(`http://127.0.0.1:8080/post/${postId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            text: newText,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            alert("수정 완료!");
+            window.location.href = "postpage.html";
+          })
+          .catch((error) => console.error("수정 오류:", error));
+      }
+    </script>
+  </head>
+
+  <body>
+    <h2>글 수정 페이지</h2>
+
+    <div>
+      <label>내용 수정:</label><br />
+      <textarea id="text" rows="8" cols="40"></textarea>
+    </div>
+
+    <button onclick="updatePost()">수정완료</button>
+  </body>
+</html>
