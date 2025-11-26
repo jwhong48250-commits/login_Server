@@ -85,7 +85,7 @@
 
       // 페이지 로드 시 기존 글 내용 불러오기
       window.onload = function () {
-        fetch(`http://127.0.0.1:8080/post/${postId}`, {
+        fetch(`/post/${postId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
