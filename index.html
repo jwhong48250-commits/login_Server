@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>첫 페이지</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f0f4f8;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+        box-sizing: border-box;
+        text-align: center;
+      }
+
+      .box {
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        padding: 30px 25px;
+        max-width: 500px;
+        width: 100%;
+      }
+
+      p {
+        font-size: 22px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      button {
+        background-color: #63b3ed;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.1s;
+      }
+
+      button:hover {
+        background-color: #4299e1;
+        transform: translateY(-2px);
+      }
+    </style>
+
+    <script>
+      function login() {
+        window.location.href = "public/login.html";
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="box">
+      <p>Dwoo의 페이지</p>
+      <button onclick="login()">로그인 페이지</button>
+    </div>
+  </body>
+</html>
